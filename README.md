@@ -1,4 +1,5 @@
-# CS Energia Solar Portal
+
+<!-- redeploy trigger -->
 
 A lightweight Streamlit application that demonstrates photovoltaic sizing and financial simulation for solar energy projects.
 
