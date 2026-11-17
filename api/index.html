@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CS Energia Solar</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config for dark mode colors
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#10b981',
+            bg: '#121212',
+            card: '#18181b',
+            border: '#27272a',
+            text: '#ffffff',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-bg text-text min-h-screen flex flex-col items-center p-4">
+  <div class="max-w-2xl w-full">
+    <!-- Header with XP and subscription status -->
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold text-primary">Portal CS Energia Solar</h1>
+      <div class="text-sm text-right">
+        <span id="xp-display" class="block">XP: <span class="font-medium" id="xp-value">0</span></span>
+        <span id="sub-status" class="block text-primary">Não assinante</span>
+      </div>
+    </div>
+    <p class="text-center mb-8" id="welcome-msg">{{ welcome }}</p>
+
+    <!-- Upsell Card: Plano Solar Care+ -->
+    <div id="care-card" class="bg-card rounded-lg shadow-md p-6 mb-6 border border-border">
+      <h2 class="text-xl font-semibold mb-2 text-primary">Plano Solar Care+</h2>
+      <p class="mb-2">Manutenção trimestral para garantir <strong>+15% de eficiência</strong> e proteção da sua usina.</p>
+      <ul class="list-disc list-inside mb-2">
+        <li>Limpeza técnica dos módulos</li>
+        <li>Vistoria completa dos painéis</li>
+        <li>Inspeção elétrica e de conexões</li>
+      </ul>
+      <p class="mb-2"><strong>R$ 89,90/mês</strong> ou <strong>R$ 249,00/trimestre</strong></p>
+      <p class="text-sm text-primary mb-4"><span class="bg-primary text-bg px-1 rounded">Economize 30%</span> frente à visita avulsa de R$ 360,00</p>
+      <button id="subscribe-btn" class="w-full bg-primary hover:bg-primary/80 text-white font-medium py-2 px-4 rounded-md">
+        Assinar Plano Preventivo (+500 XP)
+      </button>
+    </div>
+
+    <!-- Dimensionamento Fotovoltaico -->
+    <div class="bg-card rounded-lg shadow-md p-6 mb-6 border border-border">
+      <h2 class="text-xl font-semibold mb-4 text-primary">Dimensionamento Fotovoltaico</h2>
+      <form id="calc-form" class="space-y-4">
+        <label class="block">
+          <span class="text-text">Capacidade desejada (kW)</span>
+          <input type="number" step="0.5" min="0.5" max="20" name="installed_kw" required class="mt-1 block w-full rounded-md bg-bg border border-border text-text focus:ring-primary focus:border-primary" />
+        </label>
+        <button type="submit" class="w-full bg-primary hover:bg-primary/80 text-white font-medium py-2 px-4 rounded-md">Calcular</button>
+      </form>
+      <div id="result" class="mt-4 hidden space-y-2 text-text">
+        <p>Produção anual estimada: <span id="yearly_kwh"></span> kWh</p>
+        <p>Investimento aproximado: US$ <span id="investment"></span></p>
+        <p>Economia anual: US$ <span id="annual_savings"></span></p>
+        <p>ROI (25 anos): <span id="roi"></span>%</p>
+        <button id="copy-msg" class="mt-2 bg-card hover:bg-card/80 border border-primary text-primary py-1 px-2 rounded">Copiar Mensagem</button>
+      </div>
+    </div>
+
+    <!-- Hub de Boas Práticas (3 pilares) -->
+    <div class="bg-card rounded-lg shadow-md p-6 mb-6 border border-border">
+      <h2 class="text-xl font-semibold mb-4 text-primary">Hub de Boas Práticas</h2>
+      <!-- Tabs -->
+      <div class="flex border-b border-border mb-4">
+        <button class="tab-btn px-4 py-2 text-sm font-medium text-text focus:outline-none" data-target="pilar-a">Pilar A</button>
+        <button class="tab-btn px-4 py-2 text-sm font-medium text-text focus:outline-none" data-target="pilar-b">Pilar B</button>
+        <button class="tab-btn px-4 py-2 text-sm font-medium text-text focus:outline-none" data-target="pilar-c">Pilar C</button>
+      </div>
+      <div id="pilar-a" class="tab-content hidden space-y-2">
+        <div class="bg-bg rounded p-3 border border-border">
+          <h3 class="font-medium mb-1">Onboarding Pós‑Homologação</h3>
+          <button class="mark-read btn-read bg-primary hover:bg-primary/80 text-white text-sm py-1 px-2 rounded">Marcar como lido (+XP)</button>
+        </div>
+        <div class="bg-bg rounded p-3 border border-border">
+          <h3 class="font-medium mb-1">Monitoramento Proativo (NOC)</h3>
+          <button class="mark-read btn-read bg-primary hover:bg-primary/80 text-white text-sm py-1 px-2 rounded">Marcar como lido (+XP)</button>
+        </div>
+        <div class="bg-bg rounded p-3 border border-border">
+          <h3 class="font-medium mb-1">Gestão de Expectativas – Primeira Fatura</h3>
+          <button class="mark-read btn-read bg-primary hover:bg-primary/80 text-white text-sm py-1 px-2 rounded">Marcar como lido (+XP)</button>
+        </div>
+      </div>
+      <div id="pilar-b" class="tab-content hidden space-y-2">
+        <p class="text-text">[Conteúdo comparativo Cliente vs. Empresa – 5 áreas críticas] (placeholder)</p>
+      </div>
+      <div id="pilar-c" class="tab-content hidden space-y-2">
+        <p class="text-text">[Timeline dos 4 Rituais Pós‑Venda] (placeholder)</p>
+      </div>
+    </div>
+
+    <!-- Sobre o Projeto -->
+    <div class="bg-card rounded-lg shadow-md p-6 border border-border">
+      <h2 class="text-xl font-semibold mb-4 text-primary">Sobre o Projeto</h2>
+      <p>Este portal demonstra cálculo de dimensionamento e análise financeira para sistemas solares.</p>
+      <p class="mt-2">Confira o <a href="https://github.com/gabrielfranca0901/portal-cs-energia-solar-python" class="text-primary underline" target="_blank">repositório no GitHub</a> para mais detalhes.</p>
+    </div>
+  </div>
+
+  <!-- Modal for subscription -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-card rounded-lg p-6 w-80">
+      <h3 class="text-lg font-semibold mb-2 text-primary">Assinar Plano Solar Care+</h3>
+      <label class="block mb-2">
+        <span class="text-text">Tipo de plano</span>
+        <select id="plan-select" class="mt-1 block w-full bg-bg border border-border text-text rounded">
+          <option value="monthly">Mensal (R$ 89,90)</option>
+          <option value="quarterly">Trimestral (R$ 249,00)</option>
+        </select>
+      </label>
+      <button id="confirm-subscribe" class="w-full bg-primary hover:bg-primary/80 text-white py-2 rounded-md mb-2">Confirmar</button>
+      <button id="close-modal" class="w-full bg-card hover:bg-card/80 border border-primary text-primary py-2 rounded-md">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast" class="fixed bottom-4 right-4 bg-primary text-bg px-4 py-2 rounded shadow-md opacity-0 transition-opacity duration-300"></div>
+
+  <script>
+    // Fetch and render gamification state on load
+    async function loadState() {
+      const res = await fetch('/api/gamification/state');
+      const data = await res.json();
+      document.getElementById('xp-value').textContent = data.xp;
+      document.getElementById('sub-status').textContent = data.subscribed ? 'Assinante Protegido' : 'Não assinante';
+    }
+    loadState();
+
+    // Toast helper
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      setTimeout(() => { toast.classList.remove('opacity-100'); toast.classList.add('opacity-0'); }, 3000);
+    }
+
+    // Subscription flow
+    const subscribeBtn = document.getElementById('subscribe-btn');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('close-modal');
+    const confirmSubscribe = document.getElementById('confirm-subscribe');
+    subscribeBtn.addEventListener('click', () => { modal.classList.remove('hidden'); });
+    closeModal.addEventListener('click', () => { modal.classList.add('hidden'); });
+    confirmSubscribe.addEventListener('click', async () => {
+      const plan = document.getElementById('plan-select').value;
+      await fetch('/api/gamification/subscribe', { method: 'POST', body: new URLSearchParams({ plan }) });
+      modal.classList.add('hidden');
+      await loadState();
+      showToast('Usina Blindada 🛡️ (+500 XP)');
+      // Update card status
+      document.getElementById('care-card').innerHTML = `<h2 class="text-xl font-semibold mb-2 text-primary">Plano Solar Care+ (Ativo)</h2><p class="mb-2 text-primary">Multiplicador de pontos 1.5x ativo.</p><button id="complete-visit" class="w-full bg-primary hover:bg-primary/80 text-white py-2 rounded-md">Concluir Visita Trimestral (+250 XP)</button>`;
+      document.getElementById('complete-visit').addEventListener('click', async () => {
+        await fetch('/api/gamification/complete-visit', { method: 'POST' });
+        await loadState();
+        showToast('Visita Trimestral concluída (+250 XP)');
+      });
+    });
+
+    // Tab navigation for Hub
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-target');
+        contents.forEach(c => c.classList.add('hidden'));
+        document.getElementById(target).classList.remove('hidden');
+        tabs.forEach(t => t.classList.remove('border-b-2', 'border-primary'));
+        tab.classList.add('border-b-2', 'border-primary');
+      });
+    });
+    // Activate first tab by default
+    tabs[0].click();
+
+    // Mark as read buttons (adds XP using multiplier)
+    document.querySelectorAll('.mark-read').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await fetch('/api/gamification/add-xp', { method: 'POST', body: new URLSearchParams({ amount: 100 }) });
+        await loadState();
+        btn.disabled = true;
+        btn.textContent = 'Lido (+XP)';
+        showToast('Conteúdo lido (+100 XP)');
+      });
+    });
+
+    // Existing calculator logic (unchanged)
+    const form = document.getElementById('calc-form');
+    const resultDiv = document.getElementById('result');
+    const copyBtn = document.getElementById('copy-msg');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const response = await fetch('/api/calcular-solar', { method: 'POST', body: data });
+      const json = await response.json();
+      if (json.error) { alert(json.error); return; }
+      document.getElementById('yearly_kwh').textContent = Number(json.yearly_kwh).toLocaleString(undefined, {maximumFractionDigits:0});
+      document.getElementById('investment').textContent = Number(json.investment).toLocaleString(undefined, {maximumFractionDigits:0});
+      document.getElementById('annual_savings').textContent = Number(json.annual_savings).toLocaleString(undefined, {maximumFractionDigits:0});
+      document.getElementById('roi').textContent = Number(json.roi).toFixed(1);
+      resultDiv.classList.remove('hidden');
+    });
+    copyBtn.addEventListener('click', () => {
+      const msg = `🚀 ${document.getElementById('welcome-msg').textContent}\n` +
+        `⚡ Produção anual: ${document.getElementById('yearly_kwh').textContent} kWh\n` +
+        `💰 Investimento: US$ ${document.getElementById('investment').textContent}\n` +
+        `💡 Economia anual: US$ ${document.getElementById('annual_savings').textContent}\n` +
+        `📈 ROI (25 anos): ${document.getElementById('roi').textContent}%`;
+      navigator.clipboard.writeText(msg).then(() => alert('Mensagem copiada!'));
+    });
+  </script>
+</body>
+</html>
